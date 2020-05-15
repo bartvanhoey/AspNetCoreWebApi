@@ -1,0 +1,2 @@
+1.Scaffolding Command
+dotnet ef dbcontext scaffold "Server=DESKTOP-FCORAVN\SQLEXPRESS;Database=BookStoresDB;Trusted_Connection=true;" Microsoft.EntityFrameworkCore.SqlServer -o Models
