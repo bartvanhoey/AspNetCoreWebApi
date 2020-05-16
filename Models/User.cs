@@ -14,7 +14,7 @@ namespace BookStoresWebAPI.Models
         public byte? JobLevel { get; set; }
         public int PubId { get; set; }
         public DateTime HireDate { get; set; }
-
+        public string EmailAddress { get; set; }
         public virtual Job Job { get; set; }
         public virtual Publisher Pub { get; set; }
     }

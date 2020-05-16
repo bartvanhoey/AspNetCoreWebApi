@@ -304,6 +304,11 @@ namespace BookStoresWebAPI.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.EmailAddress)
+                    .HasColumnName("email_address")
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.FirstName)
                     .IsRequired()
                     .HasColumnName("first_name")
