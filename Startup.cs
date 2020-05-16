@@ -29,8 +29,8 @@ namespace BookStoresWebAPI
         {
             services.AddControllers();
 
-              services.AddDbContext<BookStoresDBContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("BookStoresDB")));
+            services.AddDbContext<BookStoresDbContext>(options =>
+                  options.UseSqlServer(Configuration.GetConnectionString("BookStoresDB")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

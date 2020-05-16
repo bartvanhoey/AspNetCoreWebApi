@@ -1,2 +1,7 @@
 1.Scaffolding Command
 dotnet ef dbcontext scaffold "Server=DESKTOP-FCORAVN\SQLEXPRESS;Database=BookStoresDB;Trusted_Connection=true;" Microsoft.EntityFrameworkCore.SqlServer -o Models
+2.Scaffolding Command force 
+dotnet ef dbcontext scaffold "Server=DESKTOP-FCORAVN\SQLEXPRESS;Database=BookStoresDB;Trusted_Connection=true;" Microsoft.EntityFrameworkCore.SqlServer -o Models -f
+3.Scaffolding using connection string from appsettings
+dotnet ef dbcontext scaffold Name=BookStoresDb Microsoft.EntityFrameworkCore.SqlServer -o Models -f
+4.pluralize DbSet names -> install package Bricelam.EntityFrameworkCore.Pluralizer

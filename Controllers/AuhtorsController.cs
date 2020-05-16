@@ -11,16 +11,17 @@ namespace BookStoresWebAPI.Controllers
     [ApiController]
     public class AuthorsController : ControllerBase
     {
-        private readonly BookStoresDBContext _context;
+        private readonly BookStoresDbContext _context;
 
-        public AuthorsController(BookStoresDBContext context){
+        public AuthorsController(BookStoresDbContext context)
+        {
             _context = context;
         }
 
         [HttpGet]
         public IEnumerable<Author> Get()
         {
-            return _context.Author.ToList();
+            return _context.Authors.ToList();
         }
     }
 }
