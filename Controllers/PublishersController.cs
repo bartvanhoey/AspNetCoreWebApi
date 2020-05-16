@@ -20,14 +20,31 @@ namespace BookStoresWebAPI.Controllers
             _context = context;
         }
 
-        // GET: api/Publishers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Publisher>>> GetPublishers()
         {
             return await _context.Publishers.ToListAsync();
         }
 
-        // GET: api/Publishers/5
+        [HttpGet("details/{id}")]
+        public async Task<ActionResult<Publisher>> GetPublisherDetails(int id)
+        {
+            var publisher = await _context.Publishers
+                .Include(p => p.Books)
+                    .ThenInclude(b => b.Sales)
+                .Include(p => p.Users)
+                    .ThenInclude(u => u.Job)
+                .FirstOrDefaultAsync(p => p.PubId == id);
+
+            if (publisher == null)
+            {
+                return NotFound();
+            }
+
+            return publisher;
+        }
+
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Publisher>> GetPublisher(int id)
         {
