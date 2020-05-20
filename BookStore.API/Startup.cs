@@ -1,7 +1,7 @@
 using System;
 using System.Text;
-using BookStoresWebAPI.Handlers;
-using BookStoresWebAPI.Models;
+using BookStore.API.Handlers;
+using BookStore.API.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -14,7 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
-namespace BookStoresWebAPI
+namespace BookStore.API
 {
     public class Startup
     {

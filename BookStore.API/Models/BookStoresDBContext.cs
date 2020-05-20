@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace BookStoresWebAPI.Models
+namespace BookStore.API.Models
 {
     public partial class BookStoresDbContext : DbContext
     {

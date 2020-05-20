@@ -3,10 +3,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using BookStoresWebAPI.Models;
+using BookStore.API.Models;
 using Microsoft.AspNetCore.Authorization;
 
-namespace BookStoresWebAPI.Controllers
+namespace BookStore.API.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]

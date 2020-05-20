@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using BookStoresWebAPI.Models;
+using BookStore.API.Models;
 
-namespace BookStoresWebAPI.Controllers
+namespace BookStore.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

@@ -1,4 +1,4 @@
-namespace BookStoresWebAPI
+namespace BookStore.API
 {
     public class JWTSettings
     {

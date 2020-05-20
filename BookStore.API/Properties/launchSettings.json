@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "BookStoresWebAPI": {
+    "BookStore.API": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "publishers",

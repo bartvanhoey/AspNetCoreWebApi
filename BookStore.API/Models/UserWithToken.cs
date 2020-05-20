@@ -1,4 +1,4 @@
-namespace BookStoresWebAPI.Models
+namespace BookStore.API.Models
 {
    public class UserWithToken : User
     {
