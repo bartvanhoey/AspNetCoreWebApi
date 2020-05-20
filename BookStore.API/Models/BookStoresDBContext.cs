@@ -300,10 +300,7 @@ namespace BookStore.API.Models
 
                 entity.ToTable("User");
 
-                entity.Property(e => e.UserId)
-                    .HasColumnName("user_id")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                entity.Property(e => e.UserId).HasColumnName("user_id");
 
                 entity.Property(e => e.ConfirmPassword)
                     .HasColumnName("confirm_password")
@@ -355,6 +352,12 @@ namespace BookStore.API.Models
 
                 entity.Property(e => e.Source)
                     .HasColumnName("source")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UserIdold)
+                    .IsRequired()
+                    .HasColumnName("user_idold")
                     .HasMaxLength(50)
                     .IsUnicode(false);
 

@@ -4,7 +4,9 @@ namespace BookStore.Models
 {
     public partial class User
     {
-        public string UserId { get; set; }
+        public int UserId { get; set; }
+
+        public string UserIdold { get; set; }
         public string Source { get; set; }
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
