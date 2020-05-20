@@ -1,0 +1,4 @@
+﻿<StaticWebAssets Version="1.0">
+  <ContentRoot BasePath="_content/BookStore.Components" Path="C:\_Data\AspNetCoreWebApi\BookStore.Components\wwwroot\" />
+  <ContentRoot BasePath="_content/MatBlazor" Path="C:\Users\bartv\.nuget\packages\matblazor\2.4.3\build\..\staticwebassets\" />
+</StaticWebAssets>
