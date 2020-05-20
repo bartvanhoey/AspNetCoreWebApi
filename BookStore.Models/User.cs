@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace BookStore.API.Models
+namespace BookStore.Models
 {
     public partial class User
     {

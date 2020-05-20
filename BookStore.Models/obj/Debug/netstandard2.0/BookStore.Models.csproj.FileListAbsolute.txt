@@ -1,0 +1,9 @@
+C:\_Data\AspNetCoreWebApi\BookStore.Models\bin\Debug\netstandard2.0\BookStore.Models.deps.json
+C:\_Data\AspNetCoreWebApi\BookStore.Models\bin\Debug\netstandard2.0\BookStore.Models.dll
+C:\_Data\AspNetCoreWebApi\BookStore.Models\bin\Debug\netstandard2.0\BookStore.Models.pdb
+C:\_Data\AspNetCoreWebApi\BookStore.Models\obj\Debug\netstandard2.0\BookStore.Models.csprojAssemblyReference.cache
+C:\_Data\AspNetCoreWebApi\BookStore.Models\obj\Debug\netstandard2.0\BookStore.Models.csproj.CoreCompileInputs.cache
+C:\_Data\AspNetCoreWebApi\BookStore.Models\obj\Debug\netstandard2.0\BookStore.Models.AssemblyInfoInputs.cache
+C:\_Data\AspNetCoreWebApi\BookStore.Models\obj\Debug\netstandard2.0\BookStore.Models.AssemblyInfo.cs
+C:\_Data\AspNetCoreWebApi\BookStore.Models\obj\Debug\netstandard2.0\BookStore.Models.dll
+C:\_Data\AspNetCoreWebApi\BookStore.Models\obj\Debug\netstandard2.0\BookStore.Models.pdb

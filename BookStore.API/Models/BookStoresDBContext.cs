@@ -1,6 +1,5 @@
-﻿using System;
+﻿using BookStore.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace BookStore.API.Models
 {
@@ -15,7 +14,7 @@ namespace BookStore.API.Models
         {
         }
 
-        public virtual DbSet<Author> Authors { get; set; }
+        public virtual DbSet<BookStore.Models.Author> Authors { get; set; }
         public virtual DbSet<Book> Books { get; set; }
         public virtual DbSet<BookAuthor> BookAuthors { get; set; }
         public virtual DbSet<Job> Jobs { get; set; }
