@@ -7,6 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BookStoresWebAPI.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 
 namespace BookStoresWebAPI.Controllers
 {
@@ -16,11 +21,41 @@ namespace BookStoresWebAPI.Controllers
     public class UsersController : ControllerBase
     {
         private readonly BookStoresDbContext _context;
+        private readonly JWTSettings _jwtSettings;
 
-        public UsersController(BookStoresDbContext context)
+        public UsersController(BookStoresDbContext context, IOptions<JWTSettings> jwtSettings)
         {
+            _jwtSettings = jwtSettings.Value;
             _context = context;
         }
+
+        [HttpGet("login")]
+        [AllowAnonymous]
+        public async Task<ActionResult<UserWithToken>> Login([FromBody] User user)
+        {
+            user = await _context.Users.Include(u => u.Job)
+                .Where(u => u.EmailAddress == user.EmailAddress && user.Password == user.Password).FirstOrDefaultAsync();
+
+            var userWithToken = new UserWithToken(user);
+            if (userWithToken == null) return NotFound();
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_jwtSettings.SecretKey);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[] {
+                    new Claim(ClaimTypes.Name, user.EmailAddress)
+                }),
+                Expires = DateTime.UtcNow.AddMonths(6),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            userWithToken.Token = tokenHandler.WriteToken(token);
+            return userWithToken;
+
+        }
+
+
 
         // GET: api/Users
         [HttpGet]

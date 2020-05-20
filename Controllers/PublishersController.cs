@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BookStoresWebAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookStoresWebAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PublishersController : ControllerBase
@@ -43,7 +43,7 @@ namespace BookStoresWebAPI.Controllers
                 .Query()
                 .Where(u => u.EmailAddress.Contains("Karin"))
                 .Load();
-            
+
             _context.Entry(publisher)
                 .Collection(p => p.Books)
                 .Query()
