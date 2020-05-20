@@ -36,12 +36,12 @@ namespace BookStore.Web
             var appSettingSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingSection);
 
-            services.AddTransient<ValidateHeaderHandler>();
+            // services.AddTransient<ValidateHeaderHandler>();
 
-            services.AddHttpClient<IBookStoreService<Publisher>, BookStoreService<Publisher>>()
-                .AddHttpMessageHandler<ValidateHeaderHandler>();
-            services.AddHttpClient<IBookStoreService<Author>, BookStoreService<Author>>()
-                .AddHttpMessageHandler<ValidateHeaderHandler>();
+            services.AddHttpClient<IBookStoreService<Publisher>, BookStoreService<Publisher>>();
+                // .AddHttpMessageHandler<ValidateHeaderHandler>();
+            services.AddHttpClient<IBookStoreService<Author>, BookStoreService<Author>>();
+                // .AddHttpMessageHandler<ValidateHeaderHandler>();
 
             services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 

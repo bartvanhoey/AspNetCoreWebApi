@@ -20,7 +20,7 @@ namespace BookStore.Web.Services.Users
         {
             var serializedUser = JsonConvert.SerializeObject(user);
 
-            var message = new HttpRequestMessage(HttpMethod.Post, "users/login");
+            var message = new HttpRequestMessage(HttpMethod.Get, "users/login");
             message.Content = new StringContent(serializedUser);
             message.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 

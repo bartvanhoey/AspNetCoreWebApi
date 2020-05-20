@@ -16,7 +16,7 @@ using BookStore.Models;
 
 namespace BookStore.API.Controllers
 {
-    [Authorize]
+    // [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -31,11 +31,11 @@ namespace BookStore.API.Controllers
         }
 
         [HttpGet("login")]
-        [AllowAnonymous]
+        // [AllowAnonymous]
         public async Task<ActionResult<UserWithToken>> Login([FromBody] User user)
         {
             user = await _context.Users.Include(u => u.Job)
-                .Where(u => u.EmailAddress == user.EmailAddress && user.Password == user.Password).FirstOrDefaultAsync();
+                .Where(u => u.EmailAddress == user.EmailAddress && u.Password == user.Password).FirstOrDefaultAsync();
 
             var userWithToken = new UserWithToken(user);
             if (userWithToken == null) return NotFound();
@@ -52,6 +52,7 @@ namespace BookStore.API.Controllers
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             userWithToken.Token = tokenHandler.WriteToken(token);
+            userWithToken.AccessToken = userWithToken.Token;
             return userWithToken;
 
         }

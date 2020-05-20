@@ -1,5 +1,7 @@
-﻿using BookStore.Models;
+﻿using System;
+using BookStore.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace BookStore.API.Models
 {
@@ -14,7 +16,7 @@ namespace BookStore.API.Models
         {
         }
 
-        public virtual DbSet<BookStore.Models.Author> Authors { get; set; }
+        public virtual DbSet<Author> Authors { get; set; }
         public virtual DbSet<Book> Books { get; set; }
         public virtual DbSet<BookAuthor> BookAuthors { get; set; }
         public virtual DbSet<Job> Jobs { get; set; }
@@ -303,6 +305,11 @@ namespace BookStore.API.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
+                entity.Property(e => e.ConfirmPassword)
+                    .HasColumnName("confirm_password")
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.EmailAddress)
                     .HasColumnName("email_address")
                     .HasMaxLength(100)
@@ -345,6 +352,11 @@ namespace BookStore.API.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.PubId).HasColumnName("pub_id");
+
+                entity.Property(e => e.Source)
+                    .HasColumnName("source")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
                 entity.HasOne(d => d.Job)
                     .WithMany(p => p.Users)

@@ -7,6 +7,11 @@ namespace BookStore.Models
         public string RefreshToken { get; set; }
         public string Token { get; set; }
 
+        public UserWithToken()
+        {
+            
+        }
+
         public UserWithToken(User user)
         {
             this.UserId = user.UserId;
