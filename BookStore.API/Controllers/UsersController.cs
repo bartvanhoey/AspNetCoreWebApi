@@ -13,6 +13,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using BookStore.Models;
+using System.Security.Cryptography;
 
 namespace BookStore.API.Controllers
 {
@@ -37,7 +38,17 @@ namespace BookStore.API.Controllers
             user = await _context.Users.Include(u => u.Job)
                 .Where(u => u.EmailAddress == user.EmailAddress && u.Password == user.Password).FirstOrDefaultAsync();
 
-            var userWithToken = new UserWithToken(user);
+            if (user == null) return NotFound();
+
+            UserWithToken userWithToken = null;
+            var refreshToken = GenerateRefreshToken();
+            user.RefreshTokens.Add(refreshToken);
+            await _context.SaveChangesAsync();
+
+            userWithToken = new UserWithToken(user);
+            userWithToken.RefreshToken = refreshToken.Token;
+
+
             if (userWithToken == null) return NotFound();
 
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -45,19 +56,29 @@ namespace BookStore.API.Controllers
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[] {
-                    new Claim(ClaimTypes.Name, user.EmailAddress)
+                    new Claim(ClaimTypes.Name, Convert.ToString(user.UserId))
                 }),
-                Expires = DateTime.UtcNow.AddMonths(6),
+                Expires = DateTime.UtcNow.AddSeconds(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             userWithToken.Token = tokenHandler.WriteToken(token);
             userWithToken.AccessToken = userWithToken.Token;
             return userWithToken;
-
         }
 
-
+        private RefreshToken GenerateRefreshToken()
+        {
+            var refreshToken = new RefreshToken();
+            var randomNumber = new byte[32];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(randomNumber);
+                refreshToken.Token = Convert.ToBase64String(randomNumber);
+            }
+            refreshToken.ExpiryDate = DateTime.UtcNow.AddMonths(6);
+            return refreshToken;
+        }
 
         // GET: api/Users
         [HttpGet]
