@@ -5,6 +5,8 @@ using BookStore.Models;
 using BookStore.Web.Services.BookStore;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using Blazored.LocalStorage;
+using BookStore.Web.Services.Users;
 
 namespace BookStore.Web.Pages
 {
@@ -12,6 +14,11 @@ namespace BookStore.Web.Pages
     {
         [Inject]
         public IBookStoreService<Author> BookStoreService { get; set; }
+        [Inject]
+        public IUserService UserService { get; set; }
+        [Inject]
+        public ILocalStorageService LocalStorageService { get; set; }
+
         [Inject]
         public IJSRuntime JSRuntime { get; set; }
         public List<Author> Authors { get; set; } = new List<Author>();
@@ -22,11 +29,31 @@ namespace BookStore.Web.Pages
         public string RecordName { get; set; }
         public bool Result { get; set; } = true;
         private string _selectedCity;
+
         private async Task LoadAuthors()
         {
- 
+
             var authors = (await BookStoreService.GetAllAsync("authors"));
+
+
+            authors = null;
+            if (authors == null)
+            {
+                var refreshRequest = new RefreshRequest
+                {
+                    AccessToken = await LocalStorageService.GetItemAsync<string>("accesstoken"),
+                    RefreshToken = await LocalStorageService.GetItemAsync<string>("refreshtoken")
+                };
+
+               var user = (await UserService.RefreshTokenAsync(refreshRequest)) as UserWithToken;
+               await  LocalStorageService.SetItemAsync("accesstoken", user.AccessToken);
+                // LocalStorageService.SetItemAsync("refreshtoken", user.RefreshToken);
+
+                 var authors = (await BookStoreService.GetAllAsync("authors"));
+            }
+
             Authors = authors != null ? authors.OrderByDescending(a => a.AuthorId).ToList() : new List<Author>();
+
             StateHasChanged();
         }
         protected void OnSelectCityChange(ChangeEventArgs changeEventArgs)

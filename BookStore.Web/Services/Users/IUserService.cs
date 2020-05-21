@@ -7,5 +7,6 @@ namespace BookStore.Web.Services.Users
     {
          Task<User> LoginAsync(User user);
          Task<User> RegisterUserAsync(User user);
+          Task<User> RefreshTokenAsync(RefreshRequest refreshRequest);
     }
 }

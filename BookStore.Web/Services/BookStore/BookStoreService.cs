@@ -44,8 +44,8 @@ namespace BookStore.Web.Services.BookStore
             var requestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri);
 
             var accessToken = await _localStorageService.GetItemAsync<string>("accessToken");
-            // requestMessage.Headers.Authorization
-            //     = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
+            requestMessage.Headers.Authorization
+                = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
 
             var response = await _httpClient.SendAsync(requestMessage);
 
@@ -65,9 +65,9 @@ namespace BookStore.Web.Services.BookStore
             requestUri = requestUri.EndsWith("/") ? requestUri + Id : requestUri + "/" + Id;
             var requestMessage = new HttpRequestMessage(HttpMethod.Get, requestUri + Id);
 
-            var token = await _localStorageService.GetItemAsync<string>("accessToken");
+            var accessToken = await _localStorageService.GetItemAsync<string>("accessToken");
             requestMessage.Headers.Authorization
-                = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
 
             var response = await _httpClient.SendAsync(requestMessage);
 
@@ -111,9 +111,9 @@ namespace BookStore.Web.Services.BookStore
             string serializedUser = JsonConvert.SerializeObject(obj);
 
             var requestMessage = new HttpRequestMessage(HttpMethod.Put, requestUri + Id);
-            var token = await _localStorageService.GetItemAsync<string>("accessToken");
+            var accessToken = await _localStorageService.GetItemAsync<string>("accessToken");
             requestMessage.Headers.Authorization
-                = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", accessToken);
 
             requestMessage.Content = new StringContent(serializedUser);
 

@@ -37,9 +37,17 @@ namespace BookStore.Web.Authentication
 
         public async Task MarkUserAsAuthenticatedAsync(User user)
         {
-            await MarkUserAsAuthenticatedAsync(user.EmailAddress);
+            var userWithToken = user as UserWithToken;
+            if (userWithToken != null)
+            {
+                await MarkUserAsAuthenticatedAsync(user.EmailAddress, userWithToken.AccessToken, userWithToken.RefreshToken);
+            }
+            else
+            {
+                await MarkUserAsAuthenticatedAsync(user.EmailAddress);
+            }
         }
-        public async Task MarkUserAsAuthenticatedAsync(string emailAddress, string token = null)
+        public async Task MarkUserAsAuthenticatedAsync(string emailAddress, string accessToken = null, string refreshToken = null)
         {
             var identity = new ClaimsIdentity(new[] {
                     new Claim(ClaimTypes.Name, emailAddress)}, "apiauth_type");
@@ -50,7 +58,8 @@ namespace BookStore.Web.Authentication
             // await _sessionStorageService.SetItemAsync("token", token);
 
             await _localStorageService.SetItemAsync("emailAddress", emailAddress);
-            await _localStorageService.SetItemAsync("accessToken", token);
+            await _localStorageService.SetItemAsync("accessToken", accessToken);
+            await _localStorageService.SetItemAsync("refreshToken", refreshToken);
 
             NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(user)));
         }

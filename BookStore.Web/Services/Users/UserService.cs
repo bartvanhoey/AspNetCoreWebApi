@@ -20,7 +20,7 @@ namespace BookStore.Web.Services.Users
         {
             var serializedUser = JsonConvert.SerializeObject(user);
 
-            var message = new HttpRequestMessage(HttpMethod.Get, "users/login");
+            var message = new HttpRequestMessage(HttpMethod.Post, "users/login");
             message.Content = new StringContent(serializedUser);
             message.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
@@ -37,6 +37,29 @@ namespace BookStore.Web.Services.Users
                 return null;
             }
         }
+
+        public async Task<User> RefreshTokenAsync(RefreshRequest refreshRequest)
+        {
+            var serializedRefreshRequest = JsonConvert.SerializeObject(refreshRequest);
+
+            var message = new HttpRequestMessage(HttpMethod.Post, "users/refreshtoken");
+            message.Content = new StringContent(serializedRefreshRequest);
+            message.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            var response = await _httpClient.SendAsync(message);
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var responseBody = await response.Content.ReadAsStringAsync();
+                var deserializedUser = JsonConvert.DeserializeObject<UserWithToken>(responseBody);
+                return deserializedUser;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
 
         public async Task<User> RegisterUserAsync(User user)
         {

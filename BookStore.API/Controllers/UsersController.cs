@@ -31,7 +31,7 @@ namespace BookStore.API.Controllers
             _context = context;
         }
 
-        [HttpGet("login")]
+        [HttpPost("login")]
         // [AllowAnonymous]
         public async Task<ActionResult<UserWithToken>> Login([FromBody] User user)
         {
@@ -48,23 +48,65 @@ namespace BookStore.API.Controllers
             userWithToken = new UserWithToken(user);
             userWithToken.RefreshToken = refreshToken.Token;
 
-
             if (userWithToken == null) return NotFound();
+            userWithToken.AccessToken = GenerateAccessToken(user.UserId);
 
+            // userWithToken.AccessToken = userWithToken.Token;
+            return userWithToken;
+        }
+
+        [HttpPost("refreshtoken")]
+        // [AllowAnonymous]
+        public async Task<ActionResult<UserWithToken>> RefreshToken([FromBody] RefreshRequest refreshRequest)
+        {
+            var user = await GetUserFromAccessToken(refreshRequest.AccessToken);
+
+            if (user != null && ValidateRefreshToken(user, refreshRequest.RefreshToken))
+            {
+                var userWithToken = new UserWithToken(user);
+                userWithToken.AccessToken = GenerateAccessToken(user.UserId);
+                return userWithToken;
+            }
+            return null;
+        }
+
+        private async Task<User> GetUserFromAccessToken(string accessToken)
+        {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtSettings.SecretKey);
-            var tokenDescriptor = new SecurityTokenDescriptor
+
+            var tokenValidationParameters = new TokenValidationParameters
             {
-                Subject = new ClaimsIdentity(new Claim[] {
-                    new Claim(ClaimTypes.Name, Convert.ToString(user.UserId))
-                }),
-                Expires = DateTime.UtcNow.AddSeconds(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ClockSkew = TimeSpan.Zero
             };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            userWithToken.Token = tokenHandler.WriteToken(token);
-            userWithToken.AccessToken = userWithToken.Token;
-            return userWithToken;
+
+            SecurityToken securityToken;
+            var principal = tokenHandler.ValidateToken(accessToken, tokenValidationParameters, out securityToken);
+
+            var jwtSecurityToken = securityToken as JwtSecurityToken;
+
+            if (jwtSecurityToken != null
+                && jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256Signature, StringComparison.InvariantCultureIgnoreCase))
+            {
+                var userId = int.Parse(principal.FindFirst(ClaimTypes.Name)?.Value);
+
+                return await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
+            }
+            return null;
+        }
+
+        private bool ValidateRefreshToken(User user, string refreshToken)
+        {
+            var token = _context.RefreshTokens.Where(t => t.Token == refreshToken).OrderByDescending(t => t.ExpiryDate).FirstOrDefault();
+            if (token != null && token.UserId == user.UserId && token.ExpiryDate > DateTime.UtcNow)
+            {
+                return true;
+            }
+            return false;
         }
 
         private RefreshToken GenerateRefreshToken()
@@ -78,6 +120,22 @@ namespace BookStore.API.Controllers
             }
             refreshToken.ExpiryDate = DateTime.UtcNow.AddMonths(6);
             return refreshToken;
+        }
+
+        private string GenerateAccessToken(int userId)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_jwtSettings.SecretKey);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[] {
+                    new Claim(ClaimTypes.Name, Convert.ToString(userId))
+                }),
+                Expires = DateTime.UtcNow.AddSeconds(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
 
         // GET: api/Users
