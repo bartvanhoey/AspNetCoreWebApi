@@ -34,22 +34,24 @@ namespace BookStore.Web.Pages
         {
 
             var authors = (await BookStoreService.GetAllAsync("authors"));
-
-
             authors = null;
             if (authors == null)
             {
+
+                var accessToken = await LocalStorageService.GetItemAsync<string>("accessToken");
+                var refreshToken = await LocalStorageService.GetItemAsync<string>("refreshToken");
+
                 var refreshRequest = new RefreshRequest
                 {
-                    AccessToken = await LocalStorageService.GetItemAsync<string>("accesstoken"),
-                    RefreshToken = await LocalStorageService.GetItemAsync<string>("refreshtoken")
+                    AccessToken = accessToken,
+                    RefreshToken = refreshToken
                 };
 
-               var user = (await UserService.RefreshTokenAsync(refreshRequest)) as UserWithToken;
-               await  LocalStorageService.SetItemAsync("accesstoken", user.AccessToken);
+                var user = (await UserService.RefreshTokenAsync(refreshRequest)) as UserWithToken;
+                await LocalStorageService.SetItemAsync("accessToken", user.AccessToken);
                 // LocalStorageService.SetItemAsync("refreshtoken", user.RefreshToken);
 
-                 var authors = (await BookStoreService.GetAllAsync("authors"));
+                authors = (await BookStoreService.GetAllAsync("authors"));
             }
 
             Authors = authors != null ? authors.OrderByDescending(a => a.AuthorId).ToList() : new List<Author>();
@@ -88,7 +90,12 @@ namespace BookStore.Web.Pages
             IsVisible = false;
         }
 
-        protected override async Task OnInitializedAsync()
+        // protected override async Task OnInitializedAsync()
+        // {
+
+        // }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             await LoadAuthors();
         }

@@ -29,8 +29,8 @@ namespace BookStore.Web.Services.Users
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 var responseBody = await response.Content.ReadAsStringAsync();
-                var deserializedUser = JsonConvert.DeserializeObject<UserWithToken>(responseBody);
-                return deserializedUser;
+                var userWithToken = JsonConvert.DeserializeObject<UserWithToken>(responseBody);
+                return userWithToken;
             }
             else
             {
@@ -51,8 +51,8 @@ namespace BookStore.Web.Services.Users
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 var responseBody = await response.Content.ReadAsStringAsync();
-                var deserializedUser = JsonConvert.DeserializeObject<UserWithToken>(responseBody);
-                return deserializedUser;
+                var userWithToken = JsonConvert.DeserializeObject<UserWithToken>(responseBody);
+                return userWithToken;
             }
             else
             {

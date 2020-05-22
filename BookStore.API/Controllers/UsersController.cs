@@ -90,7 +90,7 @@ namespace BookStore.API.Controllers
             var jwtSecurityToken = securityToken as JwtSecurityToken;
 
             if (jwtSecurityToken != null
-                && jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256Signature, StringComparison.InvariantCultureIgnoreCase))
+                && jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
             {
                 var userId = int.Parse(principal.FindFirst(ClaimTypes.Name)?.Value);
 
@@ -131,7 +131,7 @@ namespace BookStore.API.Controllers
                 Subject = new ClaimsIdentity(new Claim[] {
                     new Claim(ClaimTypes.Name, Convert.ToString(userId))
                 }),
-                Expires = DateTime.UtcNow.AddSeconds(7),
+                Expires = DateTime.UtcNow.AddSeconds(60),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
