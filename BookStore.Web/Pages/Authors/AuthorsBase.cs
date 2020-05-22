@@ -18,9 +18,9 @@ namespace BookStore.Web.Pages
         public IUserService UserService { get; set; }
         [Inject]
         public ILocalStorageService LocalStorageService { get; set; }
-
         [Inject]
         public IJSRuntime JSRuntime { get; set; }
+
         public List<Author> Authors { get; set; } = new List<Author>();
         public bool IsVisible { get; set; } = false;
         public Author Author { get; set; } = new Author();

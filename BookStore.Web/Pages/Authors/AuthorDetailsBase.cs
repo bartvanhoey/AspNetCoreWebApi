@@ -1,23 +1,22 @@
 using System.Threading.Tasks;
 using BookStore.Models;
-using BookStore.Web.Data;
+using BookStore.Web.Services.BookStore;
 using Microsoft.AspNetCore.Components;
 
 namespace BookStore.Web.Pages
 {
     public class AuthorDetailsBase : ComponentBase
     {
+        [Inject]
+        public IBookStoreService<Author> BookStoreService { get; set; }
+
         [Parameter]
         public string Id { get; set; }
-
         public Author Author { get; set; } = new Author();
-        [Inject]
-        public IAuthorService AuthorService { get; set; }
-
 
         protected override async Task OnInitializedAsync()
         {
-            Author = await AuthorService.GetAuthor(int.Parse(Id));
+            Author = await BookStoreService.GetByIdAsync("authors", int.Parse(Id));
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BookStore.Models;
-using BookStore.Web.Data.Publishers;
+// using BookStore.Web.Data.Publishers;
 using BookStore.Web.Services.BookStore;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;

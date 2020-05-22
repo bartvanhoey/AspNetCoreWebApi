@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BookStore.API.Models;
 using BookStore.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookStore.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AuthorsController : ControllerBase
@@ -33,12 +35,7 @@ namespace BookStore.API.Controllers
         public async Task<ActionResult<Author>> GetAuthor(int id)
         {
             var author = await _context.Authors.FindAsync(id);
-
-            if (author == null)
-            {
-                return NotFound();
-            }
-
+            if (author == null)return NotFound();
             return author;
         }
 
