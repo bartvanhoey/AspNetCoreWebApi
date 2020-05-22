@@ -17,7 +17,7 @@ using System.Security.Cryptography;
 
 namespace BookStore.API.Controllers
 {
-    // [Authorize]
+     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -32,7 +32,7 @@ namespace BookStore.API.Controllers
         }
 
         [HttpPost("login")]
-        // [AllowAnonymous]
+        [AllowAnonymous]
         public async Task<ActionResult<UserWithToken>> Login([FromBody] User user)
         {
             user = await _context.Users.Include(u => u.Job)
@@ -55,9 +55,9 @@ namespace BookStore.API.Controllers
             return userWithToken;
         }
 
-        [HttpPost("refreshtoken")]
-        // [AllowAnonymous]
-        public async Task<ActionResult<UserWithToken>> RefreshToken([FromBody] RefreshRequest refreshRequest)
+        [HttpPost("refreshaccesstoken")]
+        [AllowAnonymous]
+        public async Task<ActionResult<UserWithToken>> RefreshAccessToken([FromBody] RefreshRequest refreshRequest)
         {
             var user = await GetUserFromAccessToken(refreshRequest.AccessToken);
 
@@ -131,7 +131,7 @@ namespace BookStore.API.Controllers
                 Subject = new ClaimsIdentity(new Claim[] {
                     new Claim(ClaimTypes.Name, Convert.ToString(userId))
                 }),
-                Expires = DateTime.UtcNow.AddSeconds(60),
+                Expires = DateTime.UtcNow.AddSeconds(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);

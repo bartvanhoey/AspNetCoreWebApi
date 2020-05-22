@@ -66,11 +66,11 @@ namespace BookStore.Web.Services.Users
 
 
 
-        public async Task<User> RefreshTokenAsync(RefreshRequest refreshRequest)
+        public async Task<User> RefreshAccessTokenAsync(RefreshRequest refreshRequest)
         {
             var serializedRefreshRequest = JsonConvert.SerializeObject(refreshRequest);
 
-            var message = new HttpRequestMessage(HttpMethod.Post, "users/refreshtoken");
+            var message = new HttpRequestMessage(HttpMethod.Post, "users/refreshaccesstoken");
             message.Content = new StringContent(serializedRefreshRequest);
             message.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
@@ -96,6 +96,26 @@ namespace BookStore.Web.Services.Users
 
             var requestMessage = new HttpRequestMessage(HttpMethod.Post, "users/registeruser");
             requestMessage.Content = new StringContent(serializedUser);
+
+            requestMessage.Content.Headers.ContentType
+                = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+            var response = await _httpClient.SendAsync(requestMessage);
+
+            var responseStatusCode = response.StatusCode;
+            var responseBody = await response.Content.ReadAsStringAsync();
+
+            var returnedUser = JsonConvert.DeserializeObject<User>(responseBody);
+
+            return await Task.FromResult(returnedUser);
+        }
+
+        public async Task<User> GetUserByAccessTokenAsync(string accessToken)
+        {
+            string serializedAccessToken = JsonConvert.SerializeObject(accessToken);
+
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, "Users/GetUserByAccessToken");
+            requestMessage.Content = new StringContent(serializedAccessToken);
 
             requestMessage.Content.Headers.ContentType
                 = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");

@@ -34,6 +34,7 @@ namespace BookStore.Web.Pages
         {
 
             var authors = (await BookStoreService.GetAllAsync("authors"));
+            
             authors = null;
             if (authors == null)
             {
@@ -47,11 +48,13 @@ namespace BookStore.Web.Pages
                     RefreshToken = refreshToken
                 };
 
-                var user = (await UserService.RefreshTokenAsync(refreshRequest)) as UserWithToken;
-                await LocalStorageService.SetItemAsync("accessToken", user.AccessToken);
-                // LocalStorageService.SetItemAsync("refreshtoken", user.RefreshToken);
+                var user = (await UserService.RefreshAccessTokenAsync(refreshRequest)) as UserWithToken;
+                if (user != null)
+                {
+                    await LocalStorageService.SetItemAsync("accessToken", user.AccessToken);
+                    authors = (await BookStoreService.GetAllAsync("authors"));
+                }
 
-                authors = (await BookStoreService.GetAllAsync("authors"));
             }
 
             Authors = authors != null ? authors.OrderByDescending(a => a.AuthorId).ToList() : new List<Author>();
