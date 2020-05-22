@@ -1,0 +1,52 @@
+
+{
+    "publisherName": "Harper & Brothers",
+    "city": "New York City",
+    "state": "NY",
+    "country": "USA",
+    "books": [
+        {
+            "title": "Good night moon - 1",
+            "type": "UNDECIDED   ",
+            "price": null,
+            "advance": null,
+            "royalty": null,
+            "ytdSales": null,
+            "notes": null,
+            "publishedDate": "2020-05-16T08:15:23.4940419+02:00",
+            "bookAuthors": [],
+            "sales": [
+                {
+                    "storeId": "8042",
+                    "orderNum": "XYZ",
+                    "orderDate": "2020-05-16T08:15:23.494821+02:00",
+                    "quantity": 2,
+                    "payTerms": "Net 30",
+                    "store": null
+                }
+            ]
+        },
+        {
+            "title": "Good night moon - 2",
+            "type": "UNDECIDED   ",
+            "price": null,
+            "advance": null,
+            "royalty": null,
+            "ytdSales": null,
+            "notes": null,
+            "publishedDate": "2020-05-16T08:15:23.4942076+02:00",
+            "bookAuthors": [],
+            "sales": [
+                {
+                    "storeId": "7131",
+                    "orderNum": "QA879.1",
+                    "orderDate": "2020-05-16T08:15:23.4949031+02:00",
+                    "quantity": 2,
+                    "payTerms": "Net 20",
+                    "store": null
+                }
+            ]
+        }
+    ],
+    "users": []
+}

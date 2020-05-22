@@ -1,0 +1,35 @@
+1.Scaffolding Command
+dotnet ef dbcontext scaffold "Server=DESKTOP-FCORAVN\SQLEXPRESS;Database=BookStoresDB;Trusted_Connection=true;" Microsoft.EntityFrameworkCore.SqlServer -o Models
+
+2.Scaffolding Command force 
+dotnet ef dbcontext scaffold "Server=DESKTOP-FCORAVN\SQLEXPRESS;Database=BookStoresDB;Trusted_Connection=true;" Microsoft.EntityFrameworkCore.SqlServer -o Models -f
+
+3.Scaffolding using connection string from appsettings
+dotnet ef dbcontext scaffold Name=BookStoresDb Microsoft.EntityFrameworkCore.SqlServer -o Models -f
+
+4.pluralize DbSet names -> install package Bricelam.EntityFrameworkCore.Pluralizer
+
+5. await _context.Publishers.Include(p => p.Books).FirstOrDefaultAsync(p => p.PubId == id); throws exception below:
+System.Text.Json.JsonException: A possible object cycle was detected which is not supported. 
+This can either be due to a cycle or if the object depth is larger than the maximum allowed depth of 32.
+- dotnet add package microsoft.aspnetcore.mvc.newtonsoftjson
+- Startup.cs
+    services.AddMvc(opt => opt.EnableEndpointRouting = false)
+        .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+        .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+
+6. The EF Core tools version '3.1.3' is older than that of 
+the runtime '3.1.4'. Update the tools for the latest feathe runtime '3.1.tures and bug fixes. 
+- run command: dotnet tool update --global dotnet-ef
+
+7. script to generate table RefreshToken
+﻿USE [BookStoresDB]
+
+CREATE TABLE [dbo].RefreshToken(
+    [token_id] [int] IDENTITY(1, 1) NOT NULL,
+    [user_id] [int]  NOT NULL,
+    [token] [varchar](200) NOT NULL,
+    [expiry_date] [datetime] NOT NULL,
+    CONSTRAINT [PK_RefreshToken] PRIMARY KEY CLUSTERED ([token_id] ASC),
+    FOREIGN KEY ([user_id]) REFERENCES [dbo].[User] ([user_id]) ON DELETE CASCADE ON UPDATE CASCADE  
+);
